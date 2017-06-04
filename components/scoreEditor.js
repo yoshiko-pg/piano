@@ -50,23 +50,27 @@ export default class ScoreEditorComponent extends BaseComponent {
     super.render(`
       <style>
         textarea {
-          width: 450px;
-          height: 80px;
+          min-width: 600px;
+          min-height: 80px;
           font-size: 14px;
           line-height: 1.2;
           font-family: Monaco, monospace;
         }
         
         .buttons {
-          margin: 10px 0 20px;
+          margin: 0 0 30px;
+        }
+        
+        .buttons button {
+          margin: 0 10px;
         }
       </style>
 
-      <textarea>${this.value}</textarea>
       <div class="buttons">
         <button id="play">Play</button>
         <button id="save">Save as URL</button>
       </div>
+      <textarea>${this.value}</textarea>
     `);
   }
 }
