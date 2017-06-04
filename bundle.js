@@ -114,10 +114,10 @@ class KeyComponent extends BaseComponent {
         }
         
         :host-context(.black-keys) {
-          border: 1px solid #555;
-          background-color: #666;
-          box-shadow: inset 0 0 4px 0 #888;
-          color: #fff;
+          border: 1px solid #333;
+          background-color: #333;
+          box-shadow: inset 0 0 4px 0 #555;
+          color: #ddd;
         }
         
         :host-context(.white-keys) {
@@ -128,10 +128,9 @@ class KeyComponent extends BaseComponent {
         }
         
         :host-context(.bass-keys) {
-          border: 1px solid #333;
-          background-color: #333;
-          box-shadow: inset 0 0 4px 0 #555;
-          color: #ddd;
+          border: 1px solid #888;
+          background-color: #888;
+          color: #fff;
         }
         
         :host(:not([frequency])) {
@@ -142,9 +141,11 @@ class KeyComponent extends BaseComponent {
         }
         
         :host([pressing]) {
-          box-shadow: 0 0 5px 1px pink;
+          background-color: #FF7B00;
           font-weight: bold;
-          transform: translateY(1px);
+          box-shadow: none;
+          color: #fff;
+          transform: translateY(2px);
         }
       </style>
 
