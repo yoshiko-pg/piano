@@ -1,0 +1,26 @@
+{
+  "name": "webapp2-example-app",
+  "version": "0.0.0",
+  "description": "",
+  "scripts": {
+    "create:server:certificate": "cd conf; openssl genrsa -out webapp2-server.key 2048 && openssl req -new -key webapp2-server.key -out webapp2-server.csr -subj \"/C=JP/ST=Tokyo/L=Tokyo/CN=localhost\" && openssl x509 -in webapp2-server.csr -days 3650 -req -signkey webapp2-server.key > webapp2-server.crt",
+    "build:image": "docker build -t webapp2-nginx .",
+    "remove:image": "docker rmi webapp2-nginx",
+    "start": "docker run --name app -d -p 80:80 -p 443:443 -v $(pwd)/app:/usr/share/nginx/html/app:ro webapp2-nginx",
+    "stop": "docker stop app; docker rm app",
+    "bundle": "rollup -c",
+    "watch": "rollup -w -c &",
+    "unwatch": "killall -- node $(pwd)/node_modules/.bin/rollup -w -c; exit 0",
+    "eslint": "eslint app/lib --",
+    "zip": "zip -r WebApp2.zip . -x 'node_modules/*' '.git/*'"
+  },
+  "devDependencies": {
+    "eslint": "^3.19.0",
+    "rollup": "^0.41.6",
+    "rollup-watch": "^3.2.2",
+    "rollup-plugin-buble": "^0.15.0",
+    "rollup-plugin-commonjs": "^8.0.2",
+    "rollup-plugin-license": "^0.4.0",
+    "rollup-plugin-node-resolve": "^3.0.0"
+  }
+}
