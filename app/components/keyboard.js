@@ -7,7 +7,7 @@ export default class KeyboardComponent extends BaseComponent {
         :host {
           display: block;
           text-align: center;
-          margin: 50px 0;
+          margin: 50px 0 40px;
         }
 
         div {
