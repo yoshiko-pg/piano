@@ -318,7 +318,7 @@ class ScoreEditorComponent extends BaseComponent {
           height: 80px;
           font-size: 14px;
           line-height: 1.2;
-          font-family: monospace;
+          font-family: Monaco, monospace;
         }
         
         .buttons {
