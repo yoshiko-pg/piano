@@ -7,7 +7,7 @@ import path from "path";
 // ES6+ESModules -> ES6 bundle
 export default {
   format: "es",
-  entry: "app/lib/AppMain.js",
+  entry: "app/components/index.js",
   dest: "app/bundle.js",
   plugins: [
   //resolve({ jsnext: true }),
@@ -31,7 +31,7 @@ export default {
 /*
 export default {
   format: "iife", // wrap (function(){ code })();
-  entry: "app/lib/AppMain.js",
+  entry: "app/components/index.js",
   dest: "app/bundle.js",
   plugins: [
     resolve({ jsnext: true }),

@@ -1,34 +1,21 @@
-# WebApp/2
+# piano
 
-Docker + HTTP/2 + ESModules based WebApplication develop environment.
+- ESModules
+- Web Components
+    - Custom Elements
+    - Shadow DOM
+- Web Audio API
 
-## Document
+## setup
 
-- [Overview](https://github.com/uupaa/WebApp2/wiki)
-- [Install and Setup](https://github.com/uupaa/WebApp2/wiki/Install-and-Setup)
+```sh
+git clone git@github.com:yoshiko-pg/piano.git
+cd piano
+npm run create:server:certificate
+docker build -t webapp2-nginx .
+npm start
+```
 
+## links
 
-## Licence
-
-MIT License
-
-Copyright (c) 2017 uupaa
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-
+Base environment is https://github.com/uupaa/WebApp2

@@ -11,7 +11,8 @@
     "bundle": "rollup -c",
     "watch": "rollup -w -c &",
     "unwatch": "killall -- node $(pwd)/node_modules/.bin/rollup -w -c; exit 0",
-    "eslint": "eslint app/lib --",
+    "lint": "eslint --ext .js ./",
+    "lint:fix": "eslint --ext .js --fix ./",
     "zip": "zip -r WebApp2.zip . -x 'node_modules/*' '.git/*'"
   },
   "devDependencies": {
