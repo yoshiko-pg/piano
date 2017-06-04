@@ -1,105 +1,72 @@
 import BaseComponent from './baseComponent.js';
-import Oscillator from '../lib/oscillator.js';
 
-export default class KeyComponent extends BaseComponent {
+export default class ScoreEditorComponent extends BaseComponent {
   constructor() {
     super();
-
-    const key = this.getAttribute('key').toUpperCase();
-    const frequency = parseFloat(this.getAttribute('frequency')) || 0;
-
-    if (!key) {
-      throw new Error('attr key is required.');
-    }
-
-    this.key = key;
-    this.oscillator = new Oscillator(frequency);
-
-    window.addEventListener('keydown', this.keydown.bind(this));
-    window.addEventListener('keyup', this.keyup.bind(this));
+    this.value = decodeURIComponent(window.location.hash.replace(/^#/, ''));
   }
 
-  keydown(event) {
-    if (event.code === 'ShiftLeft') {
-      this.oscillator.frequency /= 2;
-    }
-    if (event.code === 'ShiftRight') {
-      this.oscillator.frequency *= 2;
-    }
-    if (this.hasAttribute('pressing')) {
-      return;
-    }
-    if (event.key.toUpperCase() === this.key) {
-      this.setAttribute('pressing', true);
-      this.oscillator.start(this.key);
-      this.render();
-    }
+  connectedCallback() {
+    this.render();
+
+    this.$('#play').addEventListener('click', this.play.bind(this));
+    this.$('#save').addEventListener('click', this.save.bind(this));
   }
 
-  keyup(event) {
-    if (event.code === 'ShiftLeft') {
-      this.oscillator.frequency *= 2;
-    }
-    if (event.code === 'ShiftRight') {
-      this.oscillator.frequency /= 2;
-    }
-    if (event.key.toUpperCase() === this.key) {
-      this.removeAttribute('pressing');
-      this.oscillator.stop();
-      this.render();
-    }
+  play() {
+    const text = this.$('textarea').value;
+    text.split('\n').forEach((line) => {
+      (async () => {
+        for (const char of line.split('')) {
+          const event = new Event('keydown');
+          event.key = char;
+          window.dispatchEvent(event);
+          await this.timeout(150, () => {
+            const event = new Event('keyup');
+            event.key = char;
+            window.dispatchEvent(event);
+          })
+        }
+      })();
+    });
+  }
+
+  timeout(msec, callback) {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        callback();
+        resolve();
+      }, msec)
+    });
+  }
+
+  save() {
+    const text = this.$('textarea').value;
+    const encoded = encodeURIComponent(text);
+    history.pushState(null, null, `#${encoded}`);
   }
 
   render() {
     super.render(`
       <style>
-        :host {
-          display: inline-flex;
-          width: 40px;
-          height: 40px;
-          align-items: center;
-          justify-content: center;
-          margin: 3px;
-          border-radius: 3px;
+        textarea {
+          width: 450px;
+          height: 80px;
+          font-size: 14px;
+          line-height: 1.2;
+          font-family: monospace;
         }
         
-        :host-context(.black-keys) {
-          border: 1px solid #333;
-          background-color: #333;
-          box-shadow: inset 0 0 4px 0 #555;
-          color: #ddd;
-        }
-        
-        :host-context(.white-keys) {
-          border: 1px solid #555;
-          background-color: #f3f3f3;
-          box-shadow: inset 0 0 4px 0 #fff;
-          color: #333;
-        }
-        
-        :host-context(.bass-keys) {
-          border: 1px solid #888;
-          background-color: #888;
-          color: #fff;
-        }
-        
-        :host(:not([frequency])) {
-          border: 1px solid #eee;
-          background-color: #eee;
-          box-shadow: none;
-          color: #fff;
-        }
-        
-        :host([pressing]) {
-          background-color: #FF7B00;
-          font-weight: bold;
-          box-shadow: none;
-          color: #fff;
-          transform: translateY(2px);
+        .buttons {
+          margin: 10px 0 20px;
         }
       </style>
 
-      ${this.key}
+      <textarea>${this.value}</textarea>
+      <div class="buttons">
+        <button id="play">Play</button>
+        <button id="save">Save as URL</button>
+      </div>
     `);
   }
 }

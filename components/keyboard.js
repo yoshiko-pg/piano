@@ -13,6 +13,14 @@ export default class KeyboardComponent extends BaseComponent {
         div {
           margin-bottom: 3px;
         }
+        
+        .bass-keys {
+          background-color: #888;
+          display: inline-block;
+          padding: 4px 10px;
+          border-radius: 5px;
+          margin-top: 13px;
+        }
       </style>
 
       <div class="black-keys">
@@ -43,16 +51,34 @@ export default class KeyboardComponent extends BaseComponent {
         <my-key key="'" frequency="1318.510"></my-key>
       </div>
       <div class="bass-keys">
-        <my-key key="z" frequency="123.471"></my-key>
-        <my-key key="x" frequency="130.813"></my-key>
-        <my-key key="c" frequency="146.832"></my-key>
-        <my-key key="v" frequency="164.814"></my-key>
-        <my-key key="b" frequency="174.614"></my-key>
-        <my-key key="n" frequency="195.998"></my-key>
-        <my-key key="m" frequency="220.000"></my-key>
-        <my-key key="," frequency="246.942"></my-key>
-        <my-key key="." frequency="261.626"></my-key>
-        <my-key key="/" frequency="293.665"></my-key>
+        <span class="white-keys">
+          <my-key key="z" frequency="261.626"></my-key>
+        </span>
+        <span class="black-keys">
+          <my-key key="x" frequency="277.183"></my-key>
+        </span>
+        <span class="white-keys">
+          <my-key key="c" frequency="293.665"></my-key>
+        </span>
+        <span class="black-keys">
+          <my-key key="v" frequency="311.127"></my-key>
+        </span>
+        <span class="white-keys">
+          <my-key key="b" frequency="329.628"></my-key>
+          <my-key key="n" frequency="349.228"></my-key>
+        </span>
+        <span class="black-keys">
+          <my-key key="m" frequency="369.994"></my-key>
+        </span>
+        <span class="white-keys">
+          <my-key key="," frequency="391.995"></my-key>
+        </span>
+        <span class="black-keys">
+          <my-key key="." frequency="415.305"></my-key>
+        </span>
+        <span class="white-keys">
+          <my-key key="/" frequency="440.000"></my-key>
+        </span>
       </div>
     `);
   }

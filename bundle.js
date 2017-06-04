@@ -3,6 +3,11 @@ class BaseComponent extends HTMLElement {
     super();
     this.attachShadow({ mode: 'open' });
     this.state = state;
+    this.$ = this.querySelector;
+  }
+
+  querySelector(selector) {
+    return this.shadowRoot.querySelector(selector);
   }
 
   connectedCallback() {
@@ -30,7 +35,7 @@ class Oscillator {
     this.frequency = frequency;
     this.context = context;
     this.gain = context.createGain();
-    this.gain.gain.value = frequency < 300 ? 0.3 : 0.03;
+    this.gain.gain.value = 0.03;
     this.gain.connect(context.destination);
   }
 
@@ -64,9 +69,29 @@ class KeyComponent extends BaseComponent {
 
     this.key = key;
     this.oscillator = new Oscillator(frequency);
+  }
 
-    window.addEventListener('keydown', this.keydown.bind(this));
-    window.addEventListener('keyup', this.keyup.bind(this));
+  connectedCallback() {
+    super.connectedCallback();
+
+    if (this.hasAttribute('frequency')) {
+      window.addEventListener('keydown', this.keydown.bind(this));
+      window.addEventListener('keyup', this.keyup.bind(this));
+      this.addEventListener('mousedown', this.mousedown.bind(this));
+      this.addEventListener('mouseup', this.mouseup.bind(this));
+    }
+  }
+
+  mousedown() {
+    const event = new Event('keydown');
+    event.key = this.key;
+    window.dispatchEvent(event);
+  }
+
+  mouseup() {
+    const event = new Event('keyup');
+    event.key = this.key;
+    window.dispatchEvent(event);
   }
 
   keydown(event) {
@@ -111,6 +136,8 @@ class KeyComponent extends BaseComponent {
           justify-content: center;
           margin: 3px;
           border-radius: 3px;
+          cursor: pointer;
+          user-select: none;
         }
         
         :host-context(.black-keys) {
@@ -128,9 +155,7 @@ class KeyComponent extends BaseComponent {
         }
         
         :host-context(.bass-keys) {
-          border: 1px solid #888;
-          background-color: #888;
-          color: #fff;
+          opacity: 0.8;
         }
         
         :host(:not([frequency])) {
@@ -138,6 +163,7 @@ class KeyComponent extends BaseComponent {
           background-color: #eee;
           box-shadow: none;
           color: #fff;
+          cursor: default;
         }
         
         :host([pressing]) {
@@ -166,6 +192,14 @@ class KeyboardComponent extends BaseComponent {
 
         div {
           margin-bottom: 3px;
+        }
+        
+        .bass-keys {
+          background-color: #888;
+          display: inline-block;
+          padding: 4px 10px;
+          border-radius: 5px;
+          margin-top: 13px;
         }
       </style>
 
@@ -197,16 +231,105 @@ class KeyboardComponent extends BaseComponent {
         <my-key key="'" frequency="1318.510"></my-key>
       </div>
       <div class="bass-keys">
-        <my-key key="z" frequency="123.471"></my-key>
-        <my-key key="x" frequency="130.813"></my-key>
-        <my-key key="c" frequency="146.832"></my-key>
-        <my-key key="v" frequency="164.814"></my-key>
-        <my-key key="b" frequency="174.614"></my-key>
-        <my-key key="n" frequency="195.998"></my-key>
-        <my-key key="m" frequency="220.000"></my-key>
-        <my-key key="," frequency="246.942"></my-key>
-        <my-key key="." frequency="261.626"></my-key>
-        <my-key key="/" frequency="293.665"></my-key>
+        <span class="white-keys">
+          <my-key key="z" frequency="261.626"></my-key>
+        </span>
+        <span class="black-keys">
+          <my-key key="x" frequency="277.183"></my-key>
+        </span>
+        <span class="white-keys">
+          <my-key key="c" frequency="293.665"></my-key>
+        </span>
+        <span class="black-keys">
+          <my-key key="v" frequency="311.127"></my-key>
+        </span>
+        <span class="white-keys">
+          <my-key key="b" frequency="329.628"></my-key>
+          <my-key key="n" frequency="349.228"></my-key>
+        </span>
+        <span class="black-keys">
+          <my-key key="m" frequency="369.994"></my-key>
+        </span>
+        <span class="white-keys">
+          <my-key key="," frequency="391.995"></my-key>
+        </span>
+        <span class="black-keys">
+          <my-key key="." frequency="415.305"></my-key>
+        </span>
+        <span class="white-keys">
+          <my-key key="/" frequency="440.000"></my-key>
+        </span>
+      </div>
+    `);
+  }
+}
+
+class ScoreEditorComponent extends BaseComponent {
+  constructor() {
+    super();
+    this.value = decodeURIComponent(window.location.hash.replace(/^#/, ''));
+  }
+
+  connectedCallback() {
+    this.render();
+
+    this.$('#play').addEventListener('click', this.play.bind(this));
+    this.$('#save').addEventListener('click', this.save.bind(this));
+  }
+
+  play() {
+    const text = this.$('textarea').value;
+    text.split('\n').forEach((line) => {
+      (async () => {
+        for (const char of line.split('')) {
+          const event = new Event('keydown');
+          event.key = char;
+          window.dispatchEvent(event);
+          await this.timeout(150, () => {
+            const event = new Event('keyup');
+            event.key = char;
+            window.dispatchEvent(event);
+          });
+        }
+      })();
+    });
+  }
+
+  timeout(msec, callback) {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        callback();
+        resolve();
+      }, msec);
+    });
+  }
+
+  save() {
+    const text = this.$('textarea').value;
+    const encoded = encodeURIComponent(text);
+    history.pushState(null, null, `#${encoded}`);
+  }
+
+  render() {
+    super.render(`
+      <style>
+        textarea {
+          width: 450px;
+          height: 80px;
+          font-size: 14px;
+          line-height: 1.2;
+          font-family: monospace;
+        }
+        
+        .buttons {
+          margin: 10px 0 20px;
+        }
+      </style>
+
+      <textarea>${this.value}</textarea>
+      <div class="buttons">
+        <button id="play">Play</button>
+        <button id="save">Save as URL</button>
       </div>
     `);
   }
@@ -214,3 +337,4 @@ class KeyboardComponent extends BaseComponent {
 
 window.customElements.define('my-key', KeyComponent);
 window.customElements.define('my-keyboard', KeyboardComponent);
+window.customElements.define('my-score-editor', ScoreEditorComponent);

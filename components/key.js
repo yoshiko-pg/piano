@@ -14,9 +14,29 @@ export default class KeyComponent extends BaseComponent {
 
     this.key = key;
     this.oscillator = new Oscillator(frequency);
+  }
 
-    window.addEventListener('keydown', this.keydown.bind(this));
-    window.addEventListener('keyup', this.keyup.bind(this));
+  connectedCallback() {
+    super.connectedCallback();
+
+    if (this.hasAttribute('frequency')) {
+      window.addEventListener('keydown', this.keydown.bind(this));
+      window.addEventListener('keyup', this.keyup.bind(this));
+      this.addEventListener('mousedown', this.mousedown.bind(this));
+      this.addEventListener('mouseup', this.mouseup.bind(this));
+    }
+  }
+
+  mousedown() {
+    const event = new Event('keydown');
+    event.key = this.key;
+    window.dispatchEvent(event);
+  }
+
+  mouseup() {
+    const event = new Event('keyup');
+    event.key = this.key;
+    window.dispatchEvent(event);
   }
 
   keydown(event) {
@@ -61,6 +81,8 @@ export default class KeyComponent extends BaseComponent {
           justify-content: center;
           margin: 3px;
           border-radius: 3px;
+          cursor: pointer;
+          user-select: none;
         }
         
         :host-context(.black-keys) {
@@ -78,9 +100,7 @@ export default class KeyComponent extends BaseComponent {
         }
         
         :host-context(.bass-keys) {
-          border: 1px solid #888;
-          background-color: #888;
-          color: #fff;
+          opacity: 0.8;
         }
         
         :host(:not([frequency])) {
@@ -88,6 +108,7 @@ export default class KeyComponent extends BaseComponent {
           background-color: #eee;
           box-shadow: none;
           color: #fff;
+          cursor: default;
         }
         
         :host([pressing]) {
