@@ -21,7 +21,7 @@ export default class ScoreEditorComponent extends BaseComponent {
           const event = new Event('keydown');
           event.key = char;
           window.dispatchEvent(event);
-          await this.timeout(200, () => {
+          await this.timeout(150, () => {
             const event = new Event('keyup');
             event.key = char;
             window.dispatchEvent(event);
