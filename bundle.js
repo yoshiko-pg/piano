@@ -161,7 +161,7 @@ class KeyboardComponent extends BaseComponent {
         :host {
           display: block;
           text-align: center;
-          margin-top: 50px;
+          margin: 50px 0;
         }
 
         div {

@@ -1,9 +1,32 @@
 <!DOCTYPE html>
   <head>
     <title>Web Piano</title>
+    <style>
+      body {
+        font-size: 14px;
+        text-align: center;
+      }
+    </style>
   </head>
   <body>
+    <h1>Web piano</h1>
+
+    <p>
+      ←
+      <kbd>Left Shift</kbd>
+      /
+      <kbd>Right Shift</kbd>
+      →
+    </p>
+
     <my-keyboard></my-keyboard>
+    
+    <footer>
+      <a href="http://yoshiko-pg.github.io/" target="_blank">@yoshiko</a>
+      /
+      <a href="https://github.com/yoshiko-pg/piano">Code on GitHub</a>
+    </footer>
+    
     <script type="module" src="./components/index.js"></script>
     <script defer nomodule src="./bundle.js"></script>
   </body>
