@@ -29,6 +29,7 @@ let context;
 class Oscillator {
   constructor(frequency = 880) {
     if (!context) {
+      const AudioContext = window.AudioContext || window.webkitAudioContext;
       context = new AudioContext();
     }
 
@@ -57,10 +58,8 @@ class Oscillator {
 }
 
 class KeyComponent extends BaseComponent {
-  constructor() {
-    super();
-
-    const key = this.getAttribute('key').toUpperCase();
+  connectedCallback() {
+    const key = (this.getAttribute('key') || '').toUpperCase();
     const frequency = parseFloat(this.getAttribute('frequency')) || 0;
 
     if (!key) {
@@ -69,10 +68,6 @@ class KeyComponent extends BaseComponent {
 
     this.key = key;
     this.oscillator = new Oscillator(frequency);
-  }
-
-  connectedCallback() {
-    super.connectedCallback();
 
     if (this.hasAttribute('frequency')) {
       window.addEventListener('keydown', this.keydown.bind(this));
@@ -80,6 +75,8 @@ class KeyComponent extends BaseComponent {
       this.addEventListener('mousedown', this.mousedown.bind(this));
       this.addEventListener('mouseup', this.mouseup.bind(this));
     }
+
+    this.render();
   }
 
   mousedown() {
@@ -138,6 +135,11 @@ class KeyComponent extends BaseComponent {
           border-radius: 3px;
           cursor: pointer;
           user-select: none;
+          
+          border: 1px solid #555;
+          background-color: #f3f3f3;
+          box-shadow: inset 0 0 4px 0 #fff;
+          color: #333;
         }
         
         :host-context(.black-keys) {
@@ -145,13 +147,6 @@ class KeyComponent extends BaseComponent {
           background-color: #333;
           box-shadow: inset 0 0 4px 0 #555;
           color: #ddd;
-        }
-        
-        :host-context(.white-keys) {
-          border: 1px solid #555;
-          background-color: #f3f3f3;
-          box-shadow: inset 0 0 4px 0 #fff;
-          color: #333;
         }
         
         :host-context(.bass-keys) {
