@@ -100,9 +100,7 @@ export default class KeyComponent extends BaseComponent {
         }
         
         :host-context(.bass-keys) {
-          border: 1px solid #888;
-          background-color: #888;
-          color: #fff;
+          opacity: 0.8;
         }
         
         :host(:not([frequency])) {

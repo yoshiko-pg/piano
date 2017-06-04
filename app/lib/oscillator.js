@@ -9,7 +9,7 @@ export default class Oscillator {
     this.frequency = frequency;
     this.context = context;
     this.gain = context.createGain();
-    this.gain.gain.value = frequency < 300 ? 0.3 : 0.03;
+    this.gain.gain.value = 0.03;
     this.gain.connect(context.destination);
   }
 
