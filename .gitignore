@@ -13,5 +13,5 @@ conf/*.key
 npm-debug.log
 
 ## ignore gh-pages dir
-gh-pages
+app/bundle.js
 
