@@ -14,7 +14,30 @@ export default class ScoreEditorComponent extends BaseComponent {
   }
 
   play() {
-    // console.log('play');
+    const text = this.$('textarea').value;
+    text.split('\n').forEach((line) => {
+      (async () => {
+        for (const char of line.split('')) {
+          const event = new Event('keydown');
+          event.key = char;
+          window.dispatchEvent(event);
+          await this.timeout(200, () => {
+            const event = new Event('keyup');
+            event.key = char;
+            window.dispatchEvent(event);
+          })
+        }
+      })();
+    });
+  }
+
+  timeout(msec, callback) {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        callback();
+        resolve();
+      }, msec)
+    });
   }
 
   save() {
@@ -28,9 +51,10 @@ export default class ScoreEditorComponent extends BaseComponent {
       <style>
         textarea {
           width: 450px;
-          height: 150px;
+          height: 80px;
           font-size: 14px;
           line-height: 1.2;
+          font-family: monospace;
         }
         
         .buttons {
