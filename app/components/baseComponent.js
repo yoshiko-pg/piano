@@ -3,6 +3,11 @@ export default class BaseComponent extends HTMLElement {
     super();
     this.attachShadow({ mode: 'open' });
     this.state = state;
+    this.$ = this.querySelector;
+  }
+
+  querySelector(selector) {
+    return this.shadowRoot.querySelector(selector);
   }
 
   connectedCallback() {
