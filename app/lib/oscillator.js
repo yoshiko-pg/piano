@@ -3,6 +3,7 @@ let context;
 export default class Oscillator {
   constructor(frequency = 880) {
     if (!context) {
+      const AudioContext = window.AudioContext || window.webkitAudioContext;
       context = new AudioContext();
     }
 
