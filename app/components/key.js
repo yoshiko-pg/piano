@@ -36,12 +36,6 @@ export default class KeyComponent extends BaseComponent {
   }
 
   keydown(event) {
-    if (event.code === 'ShiftLeft') {
-      this.oscillator.frequency /= 2;
-    }
-    if (event.code === 'ShiftRight') {
-      this.oscillator.frequency *= 2;
-    }
     if (this.hasAttribute('pressing')) {
       return;
     }
@@ -53,12 +47,6 @@ export default class KeyComponent extends BaseComponent {
   }
 
   keyup(event) {
-    if (event.code === 'ShiftLeft') {
-      this.oscillator.frequency *= 2;
-    }
-    if (event.code === 'ShiftRight') {
-      this.oscillator.frequency /= 2;
-    }
     if (event.key.toUpperCase() === this.key) {
       this.removeAttribute('pressing');
       this.oscillator.stop();
