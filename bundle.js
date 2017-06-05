@@ -92,12 +92,6 @@ class KeyComponent extends BaseComponent {
   }
 
   keydown(event) {
-    if (event.code === 'ShiftLeft') {
-      this.oscillator.frequency /= 2;
-    }
-    if (event.code === 'ShiftRight') {
-      this.oscillator.frequency *= 2;
-    }
     if (this.hasAttribute('pressing')) {
       return;
     }
@@ -109,12 +103,6 @@ class KeyComponent extends BaseComponent {
   }
 
   keyup(event) {
-    if (event.code === 'ShiftLeft') {
-      this.oscillator.frequency *= 2;
-    }
-    if (event.code === 'ShiftRight') {
-      this.oscillator.frequency /= 2;
-    }
     if (event.key.toUpperCase() === this.key) {
       this.removeAttribute('pressing');
       this.oscillator.stop();
@@ -274,20 +262,20 @@ class ScoreEditorComponent extends BaseComponent {
 
   play() {
     const text = this.$('textarea').value;
-    text.split('\n').forEach((line) => {
-      (async () => {
-        for (const char of line.split('')) {
-          const event = new Event('keydown');
-          event.key = char;
-          window.dispatchEvent(event);
-          await this.timeout(150, () => {
-            const event = new Event('keyup');
-            event.key = char;
-            window.dispatchEvent(event);
-          });
-        }
-      })();
-    });
+    text.split('\n').forEach((line) => this._playLine(line));
+  }
+
+  async _playLine(line) {
+    for (const char of line.split('')) {
+      const event = new Event('keydown');
+      event.key = char;
+      window.dispatchEvent(event);
+      await this.timeout(150, () => {
+        const event = new Event('keyup');
+        event.key = char;
+        window.dispatchEvent(event);
+      });
+    }
   }
 
   timeout(msec, callback) {

@@ -15,20 +15,20 @@ export default class ScoreEditorComponent extends BaseComponent {
 
   play() {
     const text = this.$('textarea').value;
-    text.split('\n').forEach((line) => {
-      (async () => {
-        for (const char of line.split('')) {
-          const event = new Event('keydown');
-          event.key = char;
-          window.dispatchEvent(event);
-          await this.timeout(150, () => {
-            const event = new Event('keyup');
-            event.key = char;
-            window.dispatchEvent(event);
-          })
-        }
-      })();
-    });
+    text.split('\n').forEach((line) => this._playLine(line));
+  }
+
+  async _playLine(line) {
+    for (const char of line.split('')) {
+      const event = new Event('keydown');
+      event.key = char;
+      window.dispatchEvent(event);
+      await this.timeout(150, () => {
+        const event = new Event('keyup');
+        event.key = char;
+        window.dispatchEvent(event);
+      })
+    }
   }
 
   timeout(msec, callback) {
