@@ -1,4 +1,4 @@
-# piano
+# Text Piano
 
 - ESModules
 - Web Components
@@ -6,7 +6,7 @@
     - Shadow DOM
 - Web Audio API
 
-## setup
+## Setup
 
 ```sh
 git clone git@github.com:yoshiko-pg/piano.git
@@ -16,6 +16,6 @@ docker build -t webapp2-nginx .
 npm start
 ```
 
-## links
+## Links
 
 Base environment is https://github.com/uupaa/WebApp2
