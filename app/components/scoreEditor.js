@@ -19,15 +19,26 @@ export default class ScoreEditorComponent extends BaseComponent {
   }
 
   async _playLine(line) {
+    let index = 0;
     for (const char of line.split('')) {
+      if (char === '-') {
+        index++;
+        continue;
+      }
+
       const event = new Event('keydown');
       event.key = char;
       window.dispatchEvent(event);
-      await this.timeout(150, () => {
+
+      const match = line.slice(index + 1).match(/^-+/) || [''];
+      const msec = 150 * (match[0].length + 1);
+
+      await this.timeout(msec, () => {
         const event = new Event('keyup');
         event.key = char;
         window.dispatchEvent(event);
-      })
+      });
+      index++;
     }
   }
 
